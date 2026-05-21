@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { type ColumnId, type Task } from './types';
+import { type ColumnId, type Task, COLUMNS } from './types';
 import { Board } from './components/Board';
 import './App.css';
 
@@ -31,6 +31,7 @@ function generateSeedTasks(): Task[] {
 function App() {
   const [tasks, setTasks] = useState<Task[]>(generateSeedTasks);
   const [input, setInput] = useState('');
+  const [targetColumn, setTargetColumn] = useState<ColumnId>('now');
 
   const addTask = useCallback(() => {
     const trimmed = input.trim();
@@ -39,13 +40,13 @@ function App() {
     const task: Task = {
       id: crypto.randomUUID(),
       title: trimmed,
-      column: 'now',
+      column: targetColumn,
       createdAt: new Date(),
     };
 
     setTasks((prev) => [task, ...prev]);
     setInput('');
-  }, [input]);
+  }, [input, targetColumn]);
 
   const moveTask = useCallback((taskId: string, toColumn: ColumnId) => {
     setTasks((prev) =>
@@ -79,6 +80,25 @@ function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
+        <div className="column-picker" role="radiogroup" aria-label="Target column">
+          {COLUMNS.map((col) => (
+            <label
+              key={col.id}
+              className={`column-picker-label${targetColumn === col.id ? ' column-picker-label--active' : ''}`}
+              style={targetColumn === col.id ? { background: col.accent, color: '#FFFFFF' } : {}}
+            >
+              <input
+                type="radio"
+                name="column"
+                value={col.id}
+                checked={targetColumn === col.id}
+                onChange={() => setTargetColumn(col.id)}
+                className="column-picker-radio"
+              />
+              {col.label}
+            </label>
+          ))}
+        </div>
         <button type="submit" className="add-btn">
           Add
         </button>

@@ -75,6 +75,35 @@
   transform: scale(0.97);
 }
 
+.column-picker {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.column-picker-radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.column-picker-label {
+  padding: 0.4375rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.column-picker-label:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
