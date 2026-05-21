@@ -76,13 +76,18 @@
 }
 
 .sidebar-btn-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 0.9rem;
+  color: currentColor;
+}
+
+.sidebar-btn-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 .sidebar-btn-count {
@@ -93,6 +98,8 @@
   background: var(--bg-hover);
   padding: 1px 7px;
   border-radius: 5px;
+  min-width: 22px;
+  text-align: center;
 }
 
 .main-content {
@@ -187,53 +194,59 @@
   margin-bottom: 32px;
 }
 
-.history-section {
-  border-top: 1px solid var(--border);
-  padding-top: 20px;
+.history-view {
+  max-width: 600px;
 }
 
-.history-header {
+.history-view-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
-.history-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+.history-view-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
-.history-count {
+.history-view-count {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   background: var(--bg-hover);
   padding: 2px 8px;
   border-radius: 5px;
 }
 
-.history-list {
+.history-view-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.history-view-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .history-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
+  padding: 10px 14px;
   background: var(--bg-card);
   border: 1px solid var(--border-light);
-  border-radius: 6px;
-  font-size: 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
   color: var(--text-secondary);
 }
 
 .history-item-check {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--accent-done);
   font-weight: 600;
   flex-shrink: 0;
@@ -246,27 +259,9 @@
 
 .history-item-date {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   flex-shrink: 0;
-}
-
-.history-toggle {
-  margin-top: 10px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--accent-today);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.history-toggle:hover {
-  background: var(--bg-hover);
 }
 
 @keyframes shake {
@@ -306,6 +301,7 @@
 
   .add-input {
     min-width: 100%;
+    width: 100%;
   }
 
   .add-date {

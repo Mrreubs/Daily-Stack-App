@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
-import { type ColumnId, type Task, type FilterMode, FILTERS } from './types';
+import { type ColumnId, type Task, type FilterMode, NAV_ITEMS } from './types';
 import { Board } from './components/Board';
+import { IconAllTasks, IconToday, IconUpcoming, IconHistory } from './icons';
 import { pastDaysAgo, daysFromNow, todayStr, formatDateShort, formatTime } from './utils';
 import './App.css';
 
@@ -83,14 +84,18 @@ function generateSeedTasks(): Task[] {
   return tasks;
 }
 
-const HISTORY_SHOW = 6;
+const navIcon: Record<FilterMode, () => React.JSX.Element> = {
+  all: IconAllTasks,
+  today: IconToday,
+  upcoming: IconUpcoming,
+  history: IconHistory,
+};
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>(generateSeedTasks);
   const [input, setInput] = useState('');
   const [dateInput, setDateInput] = useState(todayStr());
   const [shake, setShake] = useState(false);
-  const [showAllHistory, setShowAllHistory] = useState(false);
   const [filter, setFilter] = useState<FilterMode>('all');
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -149,24 +154,34 @@ function App() {
     );
   }
 
-  const filteredTasks = useMemo(() => {
+  const boardTasks = useMemo(() => {
+    if (filter === 'history') return [];
     if (filter === 'all') return tasks;
-    return tasks.filter((t) => t.column !== 'done');
+    return tasks.filter((t) => t.column === filter);
   }, [tasks, filter]);
 
   const todayCount = tasks.filter((t) => t.column === 'today').length;
   const upcomingCount = tasks.filter((t) => t.column === 'upcoming').length;
   const doneCount = tasks.filter((t) => t.column === 'done').length;
 
-  const doneTasks = useMemo(() => tasks.filter((t) => t.column === 'done'), [tasks]);
-  const recentDone = useMemo(
-    () => [...doneTasks].sort((a, b) => {
-      const da = a.completedAt ? new Date(a.completedAt).getTime() : 0;
-      const db = b.completedAt ? new Date(b.completedAt).getTime() : 0;
-      return db - da;
-    }).slice(0, showAllHistory ? doneTasks.length : HISTORY_SHOW),
-    [doneTasks, showAllHistory]
+  const doneTasks = useMemo(
+    () => tasks.filter((t) => t.column === 'done')
+      .sort((a, b) => {
+        const da = a.completedAt ? new Date(a.completedAt).getTime() : 0;
+        const db = b.completedAt ? new Date(b.completedAt).getTime() : 0;
+        return db - da;
+      }),
+    [tasks]
   );
+
+  function navCount(id: FilterMode): number {
+    switch (id) {
+      case 'all': return todayCount + upcomingCount;
+      case 'today': return todayCount;
+      case 'upcoming': return upcomingCount;
+      case 'history': return doneCount;
+    }
+  }
 
   return (
     <div className="app-layout">
@@ -177,90 +192,84 @@ function App() {
 
         <span className="sidebar-section-label">Views</span>
         <nav className="sidebar-nav">
-          {FILTERS.map((f) => (
-            <button
-              key={f.id}
-              className={`sidebar-btn${filter === f.id ? ' sidebar-btn--active' : ''}`}
-              onClick={() => setFilter(f.id)}
-            >
-              <span className="sidebar-btn-icon">
-                {f.id === 'all' ? '⊞' : f.id === 'today' ? '◎' : '◈'}
-              </span>
-              <span>{f.label}</span>
-              <span className="sidebar-btn-count">
-                {f.id === 'all' ? todayCount + upcomingCount
-                : f.id === 'today' ? todayCount
-                : upcomingCount}
-              </span>
-            </button>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const Icon = navIcon[item.id];
+            return (
+              <button
+                key={item.id}
+                className={`sidebar-btn${filter === item.id ? ' sidebar-btn--active' : ''}`}
+                onClick={() => setFilter(item.id)}
+              >
+                <span className="sidebar-btn-icon"><Icon /></span>
+                <span>{item.label}</span>
+                <span className="sidebar-btn-count">{navCount(item.id)}</span>
+              </button>
+            );
+          })}
         </nav>
       </aside>
 
       <main className="main-content">
-        <div className="welcome-msg">
-          {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}. Let's sort the pile.
-        </div>
-        <div className="add-bar">
-          <input
-            ref={inputRef}
-            className={`add-input${shake ? ' add-input--shake' : ''}`}
-            type="text"
-            placeholder="Add a task…"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <input
-            className="add-date"
-            type="date"
-            value={dateInput}
-            onChange={(e) => setDateInput(e.target.value)}
-          />
-          <button className="add-btn" onClick={addTask}>
-            Add
-          </button>
-        </div>
-
-        <div className="board-section">
-          <Board
-            tasks={filteredTasks}
-            onMove={moveTask}
-            onDelete={deleteTask}
-            onComplete={completeTask}
-          />
-        </div>
-
-        {doneTasks.length > 0 && (
-          <section className="history-section">
-            <div className="history-header">
-              <span className="history-title">Recently completed</span>
-              <span className="history-count">{doneCount}</span>
+        {filter !== 'history' ? (
+          <>
+            <div className="welcome-msg">
+              {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}. Let's sort the pile.
             </div>
-            <div className="history-list">
-              {recentDone.map((task) => (
-                <div key={task.id} className="history-item">
-                  <span className="history-item-check">✓</span>
-                  <span className="history-item-title">{task.title}</span>
-                  <span className="history-item-date">
-                    {task.completedAt ? formatDateShort(new Date(task.completedAt)) : ''}
-                    {' '}
-                    {task.completedAt ? formatTime(new Date(task.completedAt)) : ''}
-                  </span>
-                </div>
-              ))}
-            </div>
-            {doneTasks.length > HISTORY_SHOW && (
-              <button
-                className="history-toggle"
-                onClick={() => setShowAllHistory((v) => !v)}
-              >
-                {showAllHistory
-                  ? 'Show less'
-                  : `Show all ${doneCount}`}
+
+            <div className="add-bar">
+              <input
+                ref={inputRef}
+                className={`add-input${shake ? ' add-input--shake' : ''}`}
+                type="text"
+                placeholder="Add a task…"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <input
+                className="add-date"
+                type="date"
+                value={dateInput}
+                onChange={(e) => setDateInput(e.target.value)}
+              />
+              <button className="add-btn" onClick={addTask}>
+                Add
               </button>
-            )}
-          </section>
+            </div>
+
+            <div className="board-section">
+              <Board
+                tasks={boardTasks}
+                onMove={moveTask}
+                onDelete={deleteTask}
+                onComplete={completeTask}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="history-view">
+            <div className="history-view-header">
+              <span className="history-view-title">Completed tasks</span>
+              <span className="history-view-count">{doneCount}</span>
+            </div>
+            <div className="history-view-list">
+              {doneTasks.length === 0 ? (
+                <div className="history-view-empty">No completed tasks yet</div>
+              ) : (
+                doneTasks.map((task) => (
+                  <div key={task.id} className="history-item">
+                    <span className="history-item-check">✓</span>
+                    <span className="history-item-title">{task.title}</span>
+                    <span className="history-item-date">
+                      {task.completedAt ? formatDateShort(new Date(task.completedAt)) : ''}
+                      {' '}
+                      {task.completedAt ? formatTime(new Date(task.completedAt)) : ''}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         )}
       </main>
     </div>
