@@ -105,6 +105,31 @@ function App() {
     return () => clearInterval(id);
   }, []);
 
+  const quotes = [
+    '“The secret of getting ahead is getting started.” — Mark Twain',
+    '“You don\'t have to be extreme, just consistent.” — Unknown',
+    '“Small daily improvements over time lead to stunning results.” — Robin Sharma',
+    '“Do something today that your future self will thank you for.” — Unknown',
+    '“The best time to plant a tree was 20 years ago. The second best time is now.” — Chinese Proverb',
+    '“The pain you feel today will be the strength you feel tomorrow.” — Unknown',
+    '“Don\'t break the chain.” — Jerry Seinfeld',
+    '“Your future is created by what you do today, not tomorrow.” — Robert Kiyosaki',
+  ];
+
+  const [quoteIndex, setQuoteIndex] = useState(0);
+  const [quoteFade, setQuoteFade] = useState(true);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setQuoteFade(false);
+      setTimeout(() => {
+        setQuoteIndex((i) => (i + 1) % quotes.length);
+        setQuoteFade(true);
+      }, 400);
+    }, 8000);
+    return () => clearInterval(id);
+  }, [quotes.length]);
+
   function addTask() {
     const trimmed = input.trim();
     if (!trimmed) {
@@ -227,6 +252,11 @@ function App() {
                 {' · '}
                 {clock.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
               </span>
+            </div>
+
+            <div className={`quote-card${quoteFade ? ' quote-card--visible' : ''}`}>
+              <svg className="quote-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>
+              <span className="quote-text">{quotes[quoteIndex]}</span>
             </div>
 
             <div className="add-bar">

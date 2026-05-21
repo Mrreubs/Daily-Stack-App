@@ -129,6 +129,36 @@
   color: var(--text-secondary);
 }
 
+.quote-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.quote-card--visible {
+  opacity: 1;
+}
+
+.quote-icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0.5;
+}
+
+.quote-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.4;
+}
+
 .add-bar {
   display: flex;
   gap: 10px;
