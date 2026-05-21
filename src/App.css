@@ -4,11 +4,6 @@
   min-height: 100vh;
 }
 
-.app-inner {
-  max-width: 64rem;
-  margin: 0 auto;
-}
-
 .app-header {
   margin-bottom: 1.5rem;
 }

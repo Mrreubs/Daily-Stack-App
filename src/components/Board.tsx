@@ -7,9 +7,10 @@ interface BoardProps {
   tasks: Task[];
   onMove: (taskId: string, toColumn: ColumnId) => void;
   onDelete: (taskId: string) => void;
+  onEdit: (taskId: string, newTitle: string) => void;
 }
 
-export function Board({ tasks, onMove, onDelete }: BoardProps) {
+export function Board({ tasks, onMove, onDelete, onEdit }: BoardProps) {
   const nowTasks = useMemo(() => tasks.filter((t) => t.column === 'now'), [tasks]);
   const soonTasks = useMemo(() => tasks.filter((t) => t.column === 'soon'), [tasks]);
   const laterTasks = useMemo(() => tasks.filter((t) => t.column === 'later'), [tasks]);
@@ -25,6 +26,7 @@ export function Board({ tasks, onMove, onDelete }: BoardProps) {
           tasks={grouped[col.id]}
           onMove={onMove}
           onDelete={onDelete}
+          onEdit={onEdit}
         />
       ))}
     </div>

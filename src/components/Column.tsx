@@ -8,9 +8,10 @@ interface ColumnProps {
   tasks: Task[];
   onMove: (taskId: string, toColumn: ColumnId) => void;
   onDelete: (taskId: string) => void;
+  onEdit: (taskId: string, newTitle: string) => void;
 }
 
-export function Column({ columnId, tasks, onMove, onDelete }: ColumnProps) {
+export function Column({ columnId, tasks, onMove, onDelete, onEdit }: ColumnProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const columnInfo = COLUMN_MAP[columnId];
 
@@ -69,6 +70,7 @@ export function Column({ columnId, tasks, onMove, onDelete }: ColumnProps) {
                 task={task}
                 onMove={onMove}
                 onDelete={onDelete}
+                onEdit={onEdit}
               />
             </li>
           ))

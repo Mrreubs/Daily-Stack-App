@@ -25,17 +25,17 @@ export function Sidebar() {
   return (
     <>
       {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} />}
-      <button
-        className="sidebar-hamburger"
-        onClick={() => setOpen((o) => !o)}
-        aria-label={open ? 'Close navigation' : 'Open navigation'}
-        aria-expanded={open}
-      >
-        <span className="sidebar-hamburger-line" />
-        <span className="sidebar-hamburger-line" />
-        <span className="sidebar-hamburger-line" />
-      </button>
       <aside className={`sidebar${open ? ' sidebar--open' : ''}`}>
+        <button
+          className="sidebar-hamburger"
+          onClick={() => setOpen((o) => !o)}
+          aria-label={open ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={open}
+        >
+          <span className="sidebar-hamburger-line" />
+          <span className="sidebar-hamburger-line" />
+          <span className="sidebar-hamburger-line" />
+        </button>
         <div className="sidebar-brand">
           <div className="sidebar-logo">WS</div>
           <div>

@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { type ColumnId, type Task, COLUMNS } from './types';
 import { Board } from './components/Board';
 import { Sidebar } from './components/Sidebar';
+import { loadTasks, saveTasks } from './utils';
 import './App.css';
 
 function generateSeedTasks(): Task[] {
@@ -30,9 +31,16 @@ function generateSeedTasks(): Task[] {
 }
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(generateSeedTasks);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const saved = loadTasks();
+    return saved ?? generateSeedTasks();
+  });
   const [input, setInput] = useState('');
   const [targetColumn, setTargetColumn] = useState<ColumnId>('now');
+
+  useEffect(() => {
+    saveTasks(tasks);
+  }, [tasks]);
 
   const addTask = useCallback(() => {
     const trimmed = input.trim();
@@ -59,6 +67,14 @@ function App() {
 
   const deleteTask = useCallback((taskId: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
+  }, []);
+
+  const editTask = useCallback((taskId: string, newTitle: string) => {
+    const trimmed = newTitle.trim();
+    if (!trimmed || trimmed.length > 200) return;
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, title: trimmed } : t))
+    );
   }, []);
 
   const taskCount = useMemo(() => tasks.length, [tasks]);
@@ -115,6 +131,7 @@ function App() {
         tasks={tasks}
         onMove={moveTask}
         onDelete={deleteTask}
+        onEdit={editTask}
       />
     </div>
     </>
