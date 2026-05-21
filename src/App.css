@@ -1,0 +1,72 @@
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.app-header {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1E293B;
+  letter-spacing: -0.03em;
+}
+
+.app-tagline {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 400;
+}
+
+.app-stats {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.app-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.app-stat-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1E293B;
+  line-height: 1;
+}
+
+.app-stat-label {
+  font-size: 0.7rem;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 16px;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
