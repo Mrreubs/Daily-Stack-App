@@ -40,6 +40,7 @@ export function Column({ columnId, tasks, onMove, onDelete }: ColumnProps) {
   return (
     <div
       className={`column${isDragOver ? ' column--drag-over' : ''}`}
+      id={`column-${columnId}`}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}

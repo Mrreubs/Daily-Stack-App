@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { type ColumnId, type Task, COLUMNS } from './types';
 import { Board } from './components/Board';
+import { Sidebar } from './components/Sidebar';
 import './App.css';
 
 function generateSeedTasks(): Task[] {
@@ -63,7 +64,9 @@ function App() {
   const taskCount = useMemo(() => tasks.length, [tasks]);
 
   return (
-    <div className="app" role="main">
+    <>
+      <Sidebar />
+      <div className="app">
       <header className="app-header">
         <h1 className="app-logo">Wahala Sorter</h1>
         <span className="app-subtitle">Sort the pile. Win the day.</span>
@@ -114,6 +117,7 @@ function App() {
         onDelete={deleteTask}
       />
     </div>
+    </>
   );
 }
 
