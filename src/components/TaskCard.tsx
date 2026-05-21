@@ -1,15 +1,14 @@
-import { type Task, COLUMNS } from '../types';
+import { type Task } from '../types';
 import { formatTime, formatDateShort } from '../utils';
 import './TaskCard.css';
 
 interface TaskCardProps {
   task: Task;
   onDelete: (id: string) => void;
+  onComplete: (id: string) => void;
 }
 
-export function TaskCard({ task, onDelete }: TaskCardProps) {
-  const columnInfo = COLUMNS.find((c) => c.id === task.column)!;
-
+export function TaskCard({ task, onDelete, onComplete }: TaskCardProps) {
   function handleDragStart(e: React.DragEvent) {
     e.dataTransfer.setData('text/plain', task.id);
     e.dataTransfer.effectAllowed = 'move';
@@ -28,6 +27,13 @@ export function TaskCard({ task, onDelete }: TaskCardProps) {
       onDragEnd={handleDragEnd}
     >
       <div className="task-card-top">
+        <button
+          className="task-card-checkbtn"
+          onClick={() => onComplete(task.id)}
+          aria-label="Mark done"
+        >
+          ◯
+        </button>
         <span className="task-card-title">{task.title}</span>
         <button
           className="task-card-delete"
@@ -38,17 +44,7 @@ export function TaskCard({ task, onDelete }: TaskCardProps) {
         </button>
       </div>
       <div className="task-card-meta">
-        {task.column === 'done' ? (
-          <span className="task-card-check">✓ Done</span>
-        ) : (
-          <span
-            className="task-card-badge"
-            style={{ background: columnInfo.accent }}
-          >
-            {columnInfo.label}
-          </span>
-        )}
-        {task.date && task.column !== 'done' && (
+        {task.column === 'upcoming' && task.date && (
           <span className="task-card-date">
             {formatDateShort(new Date(task.date))}
           </span>

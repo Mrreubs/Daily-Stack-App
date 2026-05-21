@@ -21,11 +21,12 @@ export function formatDateShort(date: Date): string {
   });
 }
 
-export function isSameDay(a: Date, b: Date): boolean {
+export function isToday(date: Date): boolean {
+  const now = new Date();
   return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate()
   );
 }
 
@@ -41,4 +42,9 @@ export function pastDaysAgo(n: number): Date {
   d.setDate(d.getDate() - n);
   d.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60));
   return d;
+}
+
+export function todayStr(): string {
+  const d = new Date();
+  return d.toISOString().split('T')[0];
 }

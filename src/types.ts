@@ -13,11 +13,17 @@ export interface ColumnInfo {
   id: ColumnId;
   label: string;
   accent: string;
-  description: string;
 }
 
 export const COLUMNS: ColumnInfo[] = [
-  { id: 'done', label: 'Done', accent: '#10B981', description: 'Completed tasks' },
-  { id: 'today', label: 'Today', accent: '#3B82F6', description: 'Tasks for today' },
-  { id: 'upcoming', label: 'Upcoming', accent: '#8B5CF6', description: 'Future tasks' },
+  { id: 'today', label: 'Today', accent: '#3B82F6' },
+  { id: 'upcoming', label: 'Upcoming', accent: '#8B5CF6' },
+];
+
+export type FilterMode = 'all' | 'today' | 'upcoming';
+
+export const FILTERS: { id: FilterMode; label: string }[] = [
+  { id: 'all', label: 'Active Tasks' },
+  { id: 'today', label: 'Today' },
+  { id: 'upcoming', label: 'Upcoming' },
 ];

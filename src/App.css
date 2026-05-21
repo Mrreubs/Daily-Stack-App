@@ -1,72 +1,314 @@
-.app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 32px;
-}
-
-.app-header {
-  margin-bottom: 40px;
+.app-layout {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  min-height: 100vh;
 }
 
-.app-brand {
+.sidebar {
+  width: 220px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  padding: 20px 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
 }
 
-.app-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.75rem;
+.sidebar-brand {
+  padding: 0 12px;
+  margin-bottom: 28px;
+}
+
+.sidebar-title {
+  font-size: 1.15rem;
   font-weight: 800;
-  color: #1E293B;
+  color: var(--text-primary);
   letter-spacing: -0.03em;
 }
 
-.app-tagline {
-  font-size: 0.85rem;
-  color: #64748B;
-  font-weight: 400;
-}
-
-.app-stats {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-}
-
-.app-stat {
+.sidebar-nav {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2px;
+  margin-bottom: 24px;
 }
 
-.app-stat-number {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 1.25rem;
+.sidebar-section-label {
+  font-size: 0.68rem;
   font-weight: 600;
-  color: #1E293B;
-  line-height: 1;
-}
-
-.app-stat-label {
-  font-size: 0.7rem;
-  color: #64748B;
+  color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  padding: 0 12px;
+  margin-bottom: 6px;
 }
 
-@media (max-width: 640px) {
-  .app {
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.sidebar-btn--active {
+  background: var(--bg-active);
+  color: var(--accent-today);
+  font-weight: 600;
+}
+
+.sidebar-btn-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.sidebar-btn-count {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: var(--bg-hover);
+  padding: 1px 7px;
+  border-radius: 5px;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 220px;
+  padding: 28px 32px;
+  min-height: 100vh;
+}
+
+.welcome-msg {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.add-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.add-input {
+  width: 360px;
+  padding: 11px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.9rem;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.add-input:focus {
+  border-color: var(--accent-today);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-today) 12%, transparent);
+}
+
+.add-input::placeholder {
+  color: var(--text-muted);
+}
+
+.add-input--shake {
+  animation: shake 0.3s ease-in-out;
+}
+
+.add-date {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.85rem;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+
+.add-date:focus {
+  border-color: var(--accent-today);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-today) 12%, transparent);
+}
+
+.add-btn {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent-today);
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.add-btn:hover {
+  opacity: 0.9;
+}
+
+.add-btn:active {
+  transform: scale(0.97);
+}
+
+.board-section {
+  margin-bottom: 32px;
+}
+
+.history-section {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.history-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.history-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--bg-hover);
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.history-item-check {
+  font-size: 0.7rem;
+  color: var(--accent-done);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.history-item-title {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.history-item-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.history-toggle {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent-today);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.history-toggle:hover {
+  background: var(--bg-hover);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 52px;
+    padding: 16px 8px;
+  }
+
+  .sidebar-title,
+  .sidebar-section-label,
+  .sidebar-btn span,
+  .sidebar-btn-count {
+    display: none;
+  }
+
+  .sidebar-btn {
+    justify-content: center;
+    padding: 9px;
+  }
+
+  .main-content {
+    margin-left: 52px;
     padding: 16px;
   }
 
-  .app-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  .add-bar {
+    flex-wrap: wrap;
+  }
+
+  .add-input {
+    min-width: 100%;
+  }
+
+  .add-date {
+    flex: 1;
   }
 }
