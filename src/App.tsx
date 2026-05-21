@@ -43,7 +43,7 @@ function App() {
       createdAt: new Date(),
     };
 
-    setTasks((prev) => [...prev, task]);
+    setTasks((prev) => [task, ...prev]);
     setInput('');
   }, [input]);
 

@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Daily-Stack-App/', // change to '/Wahala-Sorter/' after renaming repo
+  base: '/',
 })
