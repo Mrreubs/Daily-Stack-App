@@ -1,22 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg: #F8F9FA;
+  --bg: #F5F3EF;
   --bg-card: #FFFFFF;
   --bg-input: #FFFFFF;
-  --bg-hover: #F1F5F9;
-  --bg-active: #EFF6FF;
-  --text-primary: #1E293B;
-  --text-secondary: #64748B;
-  --text-muted: #94A3B8;
-  --text-hint: #CBD5E1;
-  --border: #E2E8F0;
-  --border-light: #F1F5F9;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --bg-hover: #F0EDE8;
+  --bg-active: #FFF7ED;
+  --text-primary: #1C1917;
+  --text-secondary: #78716C;
+  --text-muted: #A8A29E;
+  --text-hint: #D6D3D0;
+  --border: #E8E5E0;
+  --border-light: #F0EDE8;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --accent-today: #3B82F6;
-  --accent-upcoming: #8B5CF6;
-  --accent-done: #10B981;
+  --accent-now: #D97706;
+  --accent-soon: #7C3AED;
+  --accent-later: #059669;
   --danger-bg: #FEF2F2;
   --danger-text: #EF4444;
 }
@@ -39,6 +39,6 @@ body {
 }
 
 ::selection {
-  background: var(--accent-today);
+  background: var(--accent-now);
   color: #FFFFFF;
 }
