@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { type ColumnId, type Task } from './types';
 import { Board } from './components/Board';
 import './App.css';
@@ -32,9 +32,9 @@ function App() {
   const [tasks, setTasks] = useState<Task[]>(generateSeedTasks);
   const [input, setInput] = useState('');
 
-  function addTask() {
+  const addTask = useCallback(() => {
     const trimmed = input.trim();
-    if (!trimmed) return;
+    if (!trimmed || trimmed.length > 200) return;
 
     const task: Task = {
       id: crypto.randomUUID(),
@@ -45,43 +45,47 @@ function App() {
 
     setTasks((prev) => [...prev, task]);
     setInput('');
-  }
+  }, [input]);
 
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter') addTask();
-  }
-
-  function moveTask(taskId: string, toColumn: ColumnId) {
+  const moveTask = useCallback((taskId: string, toColumn: ColumnId) => {
     setTasks((prev) =>
       prev.map((t) =>
         t.id === taskId ? { ...t, column: toColumn } : t
       )
     );
-  }
+  }, []);
 
-  function deleteTask(taskId: string) {
+  const deleteTask = useCallback((taskId: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
-  }
+  }, []);
+
+  const taskCount = useMemo(() => tasks.length, [tasks]);
 
   return (
-    <div className="app">
+    <div className="app" role="main">
       <header className="app-header">
-        <span className="app-logo">Wahala Sorter</span>
+        <h1 className="app-logo">Wahala Sorter</h1>
         <span className="app-subtitle">Sort the pile. Win the day.</span>
       </header>
 
-      <div className="add-bar">
+      <form className="add-bar" onSubmit={(e) => { e.preventDefault(); addTask(); }}>
+        <label htmlFor="new-task" className="sr-only">New task</label>
         <input
+          id="new-task"
           className="add-input"
           type="text"
           placeholder="Add a task…"
+          maxLength={200}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
         />
-        <button className="add-btn" onClick={addTask}>
+        <button type="submit" className="add-btn">
           Add
         </button>
+      </form>
+
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {taskCount} tasks total
       </div>
 
       <Board

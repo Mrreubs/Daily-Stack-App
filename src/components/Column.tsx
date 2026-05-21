@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { type ColumnId, type Task, COLUMNS } from '../types';
+import { type ColumnId, type Task, COLUMN_MAP, DRAG_DATA_KEY } from '../types';
 import { TaskCard } from './TaskCard';
 import './Column.css';
 
@@ -12,7 +12,9 @@ interface ColumnProps {
 
 export function Column({ columnId, tasks, onMove, onDelete }: ColumnProps) {
   const [isDragOver, setIsDragOver] = useState(false);
-  const columnInfo = COLUMNS.find((c) => c.id === columnId)!;
+  const columnInfo = COLUMN_MAP[columnId];
+
+  if (!columnInfo) return null;
 
   function handleDragOver(e: React.DragEvent) {
     e.preventDefault();
@@ -31,7 +33,7 @@ export function Column({ columnId, tasks, onMove, onDelete }: ColumnProps) {
   function handleDrop(e: React.DragEvent) {
     e.preventDefault();
     setIsDragOver(false);
-    const taskId = e.dataTransfer.getData('text/plain');
+    const taskId = e.dataTransfer.getData(DRAG_DATA_KEY);
     if (taskId) onMove(taskId, columnId);
   }
 
@@ -45,26 +47,32 @@ export function Column({ columnId, tasks, onMove, onDelete }: ColumnProps) {
       style={{ '--column-accent': columnInfo.accent } as React.CSSProperties}
     >
       <div className="column-header">
-        <div className="column-header-icon" style={{ background: columnInfo.accent }} />
-        <span className="column-title">{columnInfo.label}</span>
-        <span className="column-count">{tasks.length}</span>
+        <h2 className="column-header-title">
+          <div className="column-header-icon" style={{ background: columnInfo.accent }} />
+          <span className="column-title">{columnInfo.label}</span>
+        </h2>
+        <span className="column-count" aria-label={`${tasks.length} tasks in ${columnInfo.label}`}>
+          {tasks.length}
+        </span>
       </div>
 
-      <div className="column-task-list">
+      <ul className="column-task-list" aria-label={`${columnInfo.label} tasks`}>
         {tasks.length === 0 ? (
-          <div className="column-empty">
+          <li className="column-empty">
             <span className="column-empty-text">No tasks</span>
-          </div>
+          </li>
         ) : (
           tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onDelete={onDelete}
-            />
+            <li key={task.id} className="column-task-item">
+              <TaskCard
+                task={task}
+                onMove={onMove}
+                onDelete={onDelete}
+              />
+            </li>
           ))
         )}
-      </div>
+      </ul>
     </div>
   );
 }

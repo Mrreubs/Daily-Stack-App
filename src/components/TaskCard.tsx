@@ -1,17 +1,21 @@
-import { type Task, COLUMNS } from '../types';
+import { type Task, type ColumnId, COLUMN_MAP, DRAG_DATA_KEY } from '../types';
 import { formatTime } from '../utils';
 import './TaskCard.css';
 
 interface TaskCardProps {
   task: Task;
+  onMove: (taskId: string, toColumn: ColumnId) => void;
   onDelete: (id: string) => void;
 }
 
-export function TaskCard({ task, onDelete }: TaskCardProps) {
-  const columnInfo = COLUMNS.find((c) => c.id === task.column)!;
+const ORDER: ColumnId[] = ['now', 'soon', 'later'];
+
+export function TaskCard({ task, onMove, onDelete }: TaskCardProps) {
+  const columnInfo = COLUMN_MAP[task.column];
+  const idx = ORDER.indexOf(task.column);
 
   function handleDragStart(e: React.DragEvent) {
-    e.dataTransfer.setData('text/plain', task.id);
+    e.dataTransfer.setData(DRAG_DATA_KEY, task.id);
     e.dataTransfer.effectAllowed = 'move';
     (e.currentTarget as HTMLElement).classList.add('task-card--dragging');
   }
@@ -29,13 +33,33 @@ export function TaskCard({ task, onDelete }: TaskCardProps) {
     >
       <div className="task-card-top">
         <span className="task-card-title">{task.title}</span>
-        <button
-          className="task-card-delete"
-          onClick={() => onDelete(task.id)}
-          aria-label="Delete task"
-        >
-          ×
-        </button>
+        <div className="task-card-actions">
+          {idx > 0 && (
+            <button
+              className="task-card-move"
+              onClick={() => onMove(task.id, ORDER[idx - 1])}
+              aria-label={`Move to ${COLUMN_MAP[ORDER[idx - 1]].label}`}
+            >
+              ←
+            </button>
+          )}
+          {idx < ORDER.length - 1 && (
+            <button
+              className="task-card-move"
+              onClick={() => onMove(task.id, ORDER[idx + 1])}
+              aria-label={`Move to ${COLUMN_MAP[ORDER[idx + 1]].label}`}
+            >
+              →
+            </button>
+          )}
+          <button
+            className="task-card-delete"
+            onClick={() => onDelete(task.id)}
+            aria-label="Delete task"
+          >
+            ×
+          </button>
+        </div>
       </div>
       <div className="task-card-meta">
         <span
@@ -45,7 +69,7 @@ export function TaskCard({ task, onDelete }: TaskCardProps) {
           {columnInfo.label}
         </span>
         <span className="task-card-timestamp">
-          Added {formatTime(new Date(task.createdAt))}
+          Added {formatTime(task.createdAt)}
         </span>
       </div>
     </div>

@@ -5,14 +5,12 @@
   --bg-card: #FFFFFF;
   --bg-input: #FFFFFF;
   --bg-hover: #F0EDE8;
-  --bg-active: #FFF7ED;
   --text-primary: #1C1917;
   --text-secondary: #78716C;
-  --text-muted: #A8A29E;
-  --text-hint: #D6D3D0;
+  --text-muted: #8C8883;
+  --text-hint: #B0ACA7;
   --border: #E8E5E0;
   --border-light: #F0EDE8;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
   --accent-now: #D97706;
   --accent-soon: #7C3AED;
