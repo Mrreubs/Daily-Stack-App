@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { type ColumnId, type Task, type FilterMode, NAV_ITEMS } from './types';
 import { Board } from './components/Board';
 import { IconAllTasks, IconToday, IconUpcoming, IconHistory } from './icons';
@@ -98,6 +98,12 @@ function App() {
   const [shake, setShake] = useState(false);
   const [filter, setFilter] = useState<FilterMode>('all');
   const inputRef = useRef<HTMLInputElement>(null);
+  const [clock, setClock] = useState(new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setClock(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
 
   function addTask() {
     const trimmed = input.trim();
@@ -212,8 +218,15 @@ function App() {
       <main className="main-content">
         {filter !== 'history' ? (
           <>
-            <div className="welcome-msg">
-              {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}. Let's sort the pile.
+            <div className="welcome-bar">
+              <span className="welcome-msg">
+                {clock.getHours() < 12 ? 'Good morning' : clock.getHours() < 17 ? 'Good afternoon' : 'Good evening'}. Let's sort the pile.
+              </span>
+              <span className="welcome-clock">
+                {clock.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                {' · '}
+                {clock.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
+              </span>
             </div>
 
             <div className="add-bar">
